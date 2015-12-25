@@ -1,0 +1,6 @@
+# Sublime Text project files
+*.sublime-project
+*.sublime-workspace
+
+# RubyMine files
+.idea/
