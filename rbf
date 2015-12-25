@@ -3,17 +3,26 @@
 require 'io/console'
 
 class BfInterpreter
-  def initialize(allow_flow = true)
+  def initialize(debug = false, wrap_around = true)
     @option = Hash.new
-    @option['allow_flow'] = allow_flow
+    @option['debug'] = debug
+    @option['wrap_around'] = wrap_around
+  end
+
+  def debug?
+    @option['debug']
+  end
+
+  def debug=(debug)
+    @option['debug'] = debug
   end
 
   def wrap_around?
-    @option['allow_flow']
+    @option['wrap_around']
   end
 
-  def wrap_around=(allow_flow)
-    @option['allow_flow'] = allow_flow
+  def wrap_around=(wrap_around)
+    @option['wrap_around'] = wrap_around
   end
 
   def run(src)
@@ -31,19 +40,20 @@ class BfInterpreter
     tape = Array.new
     cell = 0
     unit = units[0]
-    while unit.has_next
-      if tape[cell] == nil
-        tape[cell] = BfCell.new(cell)
-      end
+    while unit != nil
+      tape[cell] = BfCell.new(cell) if tape[cell] == nil
+
+      STDERR.printf('%s', unit.instruction) if debug?
 
       case unit.instruction
-        when '+' then tape[cell].increase(1, @option['allow_flow'])
-        when '-' then tape[cell].decrease(1, @option['allow_flow'])
+        when '+' then tape[cell].increase(1, wrap_around?)
+        when '-' then tape[cell].decrease(1, wrap_around?)
         when '<' then
           cell -= 1
           fail 'Cell position out of bound!' if cell < 0
         when '>' then cell += 1
-        when ',' then tape[cell].value = STDIN.getch
+        when ',' then
+          tape[cell].value = STDIN.getch.ord
         when '.' then STDOUT.putc tape[cell].value
         when '[' then
           if tape[cell].value == 0
@@ -55,7 +65,7 @@ class BfInterpreter
             unit = unit.match
             next
           end
-        else fail "Illegal instruction '#{c.chr}'!"
+        else fail "Illegal instruction '#{unit.instruction}'!"
       end
 
       unit = unit.next
@@ -112,16 +122,16 @@ class BfInterpreter
       @value = value
     end
 
-    def increase(increment = 1, allow_flow = true)
-      if !allow_flow && (@value + increment < 0 || @value + increment > 255)
+    def increase(increment = 1, wrap_around = true)
+      if !wrap_around && (@value + increment < 0 || @value + increment > 255)
         fail 'Overflow or underflow happened while forbidden!'
       else
         @value = (@value + increment) % 256
       end
     end
 
-    def decrease(decrement = 1, allow_flow = true)
-      self.increase(-decrement, allow_flow)
+    def decrease(decrement = 1, wrap_around = true)
+      self.increase( -decrement, wrap_around)
     end
   end
 
@@ -135,10 +145,6 @@ class BfInterpreter
       @instruction = instruction
       @match = nil
       @next = nil
-    end
-
-    def has_next
-      @next != nil
     end
   end
 end
