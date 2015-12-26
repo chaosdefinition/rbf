@@ -1,28 +1,41 @@
-#!/usr/bin/env ruby
-
 require 'io/console'
 
 class BfInterpreter
-  def initialize(debug = false, wrap_around = true)
+  # private constants
+  KEY_DEBUG = 'debug'
+  KEY_WRAP = 'wrap_around'
+  KEY_CELL = 'cell_size'
+  private_constant :KEY_DEBUG, :KEY_WRAP, :KEY_CELL
+
+  def initialize(debug = false, wrap_around = true, cell_size = 8)
     @option = Hash.new
-    @option['debug'] = debug
-    @option['wrap_around'] = wrap_around
+    @option[KEY_DEBUG] = debug
+    @option[KEY_WRAP] = wrap_around
+    @option[KEY_CELL] = cell_size
   end
 
   def debug?
-    @option['debug']
+    @option[KEY_DEBUG]
   end
 
   def debug=(debug)
-    @option['debug'] = debug
+    @option[KEY_DEBUG] = debug
   end
 
   def wrap_around?
-    @option['wrap_around']
+    @option[KEY_WRAP]
   end
 
   def wrap_around=(wrap_around)
-    @option['wrap_around'] = wrap_around
+    @option[KEY_WRAP] = wrap_around
+  end
+
+  def cell_size?
+    @option[KEY_CELL]
+  end
+
+  def cell_size=(cell_size)
+    @option[KEY_CELL] = cell_size
   end
 
   def run(src)
@@ -38,30 +51,30 @@ class BfInterpreter
 
     # do interpret
     tape = Array.new
-    cell = 0
+    position = 0
     unit = units[0]
     while unit != nil
-      tape[cell] = BfCell.new(cell) if tape[cell] == nil
+      tape[position] = BfCell.new(position) if tape[position] == nil
 
       STDERR.printf('%s', unit.instruction) if debug?
 
       case unit.instruction
-        when '+' then tape[cell].increase(1, wrap_around?)
-        when '-' then tape[cell].decrease(1, wrap_around?)
+        when '+' then tape[position].increase(1, wrap_around?)
+        when '-' then tape[position].decrease(1, wrap_around?)
         when '<' then
-          cell -= 1
-          fail 'Cell position out of bound!' if cell < 0
-        when '>' then cell += 1
+          position -= 1
+          fail 'Cell position out of bound!' if position < 0
+        when '>' then position += 1
         when ',' then
-          tape[cell].value = STDIN.getch.ord
-        when '.' then STDOUT.putc tape[cell].value
+          tape[position].value = STDIN.getch.ord
+        when '.' then STDOUT.putc tape[position].value
         when '[' then
-          if tape[cell].value == 0
+          if tape[position].value == 0
             unit = unit.match
             next
           end
         when ']' then
-          if tape[cell].value != 0
+          if tape[position].value != 0
             unit = unit.match
             next
           end
@@ -72,7 +85,7 @@ class BfInterpreter
     end
   end
 
-  private def construct_program_units(file)
+  def construct_program_units(file)
     units = Array.new
     position = 0
 
@@ -91,7 +104,7 @@ class BfInterpreter
     units
   end
 
-  private def match_brackets(units)
+  def match_brackets(units)
     units.each_index do |i|
       if units[i].instruction == '['
         level = 0
@@ -114,6 +127,8 @@ class BfInterpreter
     end
   end
 
+  private :construct_program_units, :match_brackets
+
   class BfCell
     attr_accessor :position, :value
 
@@ -131,7 +146,7 @@ class BfInterpreter
     end
 
     def decrease(decrement = 1, wrap_around = true)
-      self.increase( -decrement, wrap_around)
+      self.increase(-decrement, wrap_around)
     end
   end
 
@@ -148,6 +163,3 @@ class BfInterpreter
     end
   end
 end
-
-interpreter = BfInterpreter.new
-interpreter.run(ARGV[0])

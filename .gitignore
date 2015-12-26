@@ -4,3 +4,6 @@
 
 # RubyMine files
 .idea/
+
+# Ruby Gems
+*.gem
