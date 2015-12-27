@@ -1,41 +1,32 @@
 require 'io/console'
 
 class BfInterpreter
-  # private constants
-  KEY_DEBUG = 'debug'
-  KEY_WRAP = 'wrap_around'
-  KEY_CELL = 'cell_size'
-  private_constant :KEY_DEBUG, :KEY_WRAP, :KEY_CELL
-
-  def initialize(debug = false, wrap_around = true, cell_size = 8)
-    @option = Hash.new
-    @option[KEY_DEBUG] = debug
-    @option[KEY_WRAP] = wrap_around
-    @option[KEY_CELL] = cell_size
+  def initialize(hash)
+    @option = hash
   end
 
   def debug?
-    @option[KEY_DEBUG]
+    @option[:debug]
   end
 
   def debug=(debug)
-    @option[KEY_DEBUG] = debug
+    @option[:debug] = debug
   end
 
   def wrap_around?
-    @option[KEY_WRAP]
+    @option[:wrap_around]
   end
 
   def wrap_around=(wrap_around)
-    @option[KEY_WRAP] = wrap_around
+    @option[:wrap_around] = wrap_around
   end
 
   def cell_size?
-    @option[KEY_CELL]
+    @option[:cell_size]
   end
 
   def cell_size=(cell_size)
-    @option[KEY_CELL] = cell_size
+    @option[:cell_size] = cell_size
   end
 
   def run(src)
@@ -54,7 +45,7 @@ class BfInterpreter
     position = 0
     unit = units[0]
     while unit != nil
-      tape[position] = BfCell.new(position) if tape[position] == nil
+      tape[position] = BfCell.new(cell_size?) if tape[position] == nil
 
       STDERR.printf('%s', unit.instruction) if debug?
 
@@ -130,18 +121,19 @@ class BfInterpreter
   private :construct_program_units, :match_brackets
 
   class BfCell
-    attr_accessor :position, :value
+    attr_accessor :cell_size, :value
 
-    def initialize(position, value = 0)
-      @position = position
+    def initialize(cell_size = 8, value = 0)
+      @cell_size = cell_size
       @value = value
     end
 
     def increase(increment = 1, wrap_around = true)
-      if !wrap_around && (@value + increment < 0 || @value + increment > 255)
+      if !wrap_around &&
+          (@value + increment < 0 || @value + increment >= (1 << @cell_size))
         fail 'Overflow or underflow happened while forbidden!'
       else
-        @value = (@value + increment) % 256
+        @value = (@value + increment) % (1 << @cell_size)
       end
     end
 

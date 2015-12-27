@@ -1,6 +1,60 @@
 #!/usr/bin/env ruby
 
+# for parsing command line arguments
+require 'optparse'
+
 require 'yarbf'
 
-interpreter = BfInterpreter.new
+# set default values
+options = Hash.new
+options[:debug]       = false
+options[:wrap_around] = false
+options[:cell_size]   = 8
+
+parser = OptionParser.new do |opts|
+  opts.banner = 'yarbf - Yet another Brainfuck interpreter in Ruby'
+  opts.separator ''
+  opts.separator 'Usage: yarbf [options] <source>'
+  opts.separator ''
+  opts.separator 'Options:'
+
+  # debug
+  opts.on('-d', '--debug', 'Use debug mode') { options[:debug] = true }
+
+  # wrap around
+  opts.on('-w', '--wrap', 'Enable wrap around') { options[:wrap_around] = true }
+
+  # cell size
+  opts.on('-s', '--size SIZE', OptionParser::DecimalInteger,
+          'Set cell size') { |size| options[:cell_size] = size }
+
+  # version
+  opts.on('-V', '--version', 'show version and exit') do
+    puts 'yarbf 0.0.1'
+    exit
+  end
+
+  # help
+  opts.on('-h', '--help', 'Show this message and exit') do
+    puts opts
+    exit
+  end
+
+  opts.separator ''
+end
+
+# do parse
+begin
+  parser.parse!
+rescue OptionParser::ParseError => e
+  STDERR.puts $0 + ': ' + e.to_s
+  exit false
+end
+
+if ARGV[0] == nil
+  STDERR.puts $0 + ': no source file specified'
+  exit false
+end
+
+interpreter = BfInterpreter.new(options)
 interpreter.run(ARGV[0])

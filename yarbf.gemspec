@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   # optional attributes
   s.executables << 'yarbf'
-  s.description = 'yarbf, is a simple Brainfuck interpreter in Ruby.'
+  s.description = 'yarbf is a simple Brainfuck interpreter in Ruby.'
 
   # dependencies
   s.add_runtime_dependency 'io-console', '~> 0.4'
