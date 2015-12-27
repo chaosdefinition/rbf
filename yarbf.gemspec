@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Chaos Shen']
   s.files       = ['lib/yarbf.rb']
   s.name        = 'yarbf'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.summary     = 'Yet another Brainfuck interpreter in Ruby'
 
   # recommended attributes
