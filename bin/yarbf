@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
 
-# for parsing command line arguments
-require 'optparse'
-
+require 'optparse' # for OptionParser
 require 'yarbf'
+
+# deal with SIGINT
+Signal.trap('INT') { exit false }
 
 # set default values
 options = Hash.new
 options[:debug]       = false
 options[:wrap_around] = false
 options[:cell_size]   = 8
+options[:input_mode]  = :buffered
 
 parser = OptionParser.new do |opts|
   opts.banner = 'yarbf - Yet another Brainfuck interpreter in Ruby'
@@ -26,7 +28,11 @@ parser = OptionParser.new do |opts|
 
   # cell size
   opts.on('-s', '--size SIZE', OptionParser::DecimalInteger,
-          'Set cell size') { |size| options[:cell_size] = size }
+          'Set cell size') { |s| options[:cell_size] = s }
+
+  # input mode
+  opts.on('-i', '--input MODE', [:buffered, :raw],
+          'Set input mode (buffered, raw)') { |m| options[:input_mode] = m }
 
   # version
   opts.on('-V', '--version', 'show version and exit') do

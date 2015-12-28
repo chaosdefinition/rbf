@@ -1,4 +1,4 @@
-require 'io/console'
+require 'io/console' # for IO.getch
 
 ##
 # == BfInterpreter
@@ -15,6 +15,11 @@ require 'io/console'
 # - wrap_around:: Wrap around switch. Setting this option to true will
 #                 ignore cell value overflow or underflow. Default is false.
 # - cell_size:: Size of each cell in bit. Default is 8.
+# - input_mode:: Input mode. Available options are +:buffered+ and +:raw+.
+#                In buffered mode, the characters you type will be echoed on
+#                screen and will be buffered until you type an enter. In raw
+#                mode, there's no echoing nor buffering. Default is
+#                +:buffered+.
 #
 # === Examples
 #
@@ -32,7 +37,7 @@ class BfInterpreter
   # +hash+:: A Hash containing options to the interpreter.
   #
   def initialize(hash)
-    @option = hash
+    @option = hash.dup
   end
 
   ##
@@ -84,6 +89,22 @@ class BfInterpreter
   end
 
   ##
+  # Returns the current input mode.
+  #
+  def input_mode?
+    @option[:input_mode]
+  end
+
+  ##
+  # Sets the input mode.
+  #
+  # +input_mode+:: A symbol of +:buffered+ or +:raw+.
+  #
+  def input_mode=(input_mode)
+    @option[:input_mode] = input_mode
+  end
+
+  ##
   # Interpret a Brainfuck source file.
   #
   # +src+:: Path of the source.
@@ -109,15 +130,23 @@ class BfInterpreter
       STDERR.printf('%s', unit.instruction) if debug?
 
       case unit.instruction
-        when '+' then tape[position].increase(1, wrap_around?)
-        when '-' then tape[position].decrease(1, wrap_around?)
+        when '+' then
+          tape[position].increase(1, wrap_around?)
+        when '-' then
+          tape[position].decrease(1, wrap_around?)
         when '<' then
           position -= 1
           fail 'Cell position out of bound!' if position < 0
-        when '>' then position += 1
+        when '>' then
+          position += 1
         when ',' then
-          tape[position].value = STDIN.getch.ord
-        when '.' then STDOUT.putc tape[position].value
+          ch = nil
+          ch = STDIN.getc if input_mode? == :buffered
+          ch = STDIN.getch if input_mode? == :raw
+          exit if ch == nil
+          tape[position].value = ch.ord
+        when '.' then
+          STDOUT.putc tape[position].value
         when '[' then
           if tape[position].value == 0
             unit = unit.match
