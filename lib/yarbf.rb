@@ -175,8 +175,12 @@ module Yarbf
             position += 1
           when ',' then
             ch = nil
-            ch = STDIN.getc if input_mode? == :buffered
-            ch = STDIN.getch if input_mode? == :raw
+            begin
+              ch = STDIN.getc if input_mode? == :buffered
+              ch = STDIN.getch if input_mode? == :raw
+            rescue SystemCallError => e
+              fail e.to_s
+            end
             exit if ch.nil?
             tape[position].value = ch.ord
           when '.' then
