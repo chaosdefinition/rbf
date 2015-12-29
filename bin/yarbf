@@ -31,7 +31,7 @@ parser = OptionParser.new do |opts|
           'Set cell size') { |s| options[:cell_size] = s }
 
   # input mode
-  opts.on('-i', '--input MODE', [:buffered, :raw],
+  opts.on('-i', '--input MODE', Yarbf::INPUT_MODE_OPTIONS,
           'Set input mode (buffered, raw)') { |m| options[:input_mode] = m }
 
   # version
@@ -62,5 +62,5 @@ if ARGV[0] == nil
   exit false
 end
 
-interpreter = BfInterpreter.new(options)
+interpreter = Yarbf::BfInterpreter.new(options)
 interpreter.run(ARGV[0])
