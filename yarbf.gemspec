@@ -1,9 +1,14 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'yarbf'
+
 Gem::Specification.new do |s|
   # required attributes
   s.authors     = ['Chaos Shen']
   s.files       = ['lib/yarbf.rb']
   s.name        = 'yarbf'
-  s.version     = '0.0.2'
+  s.version     = Yarbf::VERSION
   s.summary     = 'Yet another Brainfuck interpreter in Ruby'
 
   # recommended attributes

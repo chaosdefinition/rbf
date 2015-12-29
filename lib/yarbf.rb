@@ -1,7 +1,13 @@
 require 'io/console' # for IO.getch
 
 module Yarbf
+  # gem version
+  VERSION = '0.0.2'
+
+  # available options for the program
   OPTIONS = [:debug, :wrap_around, :cell_size, :input_mode] # :nodoc:
+
+  # available options for input mode
   INPUT_MODE_OPTIONS = [:buffered, :raw] # :nodoc:
 
   ##
@@ -48,7 +54,7 @@ module Yarbf
     #
     def initialize(options)
       unless options.is_a? Hash and OPTIONS.all? { |s| options.has_key? s }
-        fail 'invalid options given!'
+        fail 'Invalid options given!'
       end
       @option = options.dup
     end
@@ -124,7 +130,7 @@ module Yarbf
     #
     def input_mode=(input_mode)
       unless INPUT_MODE_OPTIONS.include? input_mode
-        fail 'invalid value of input mode!'
+        fail 'Invalid value of input mode!'
       end
       @option[:input_mode] = input_mode
     end
@@ -152,8 +158,8 @@ module Yarbf
       tape = Array.new
       position = 0
       unit = units[0]
-      while unit != nil
-        tape[position] = BfCell.new(cell_size?) if tape[position] == nil
+      until unit.nil?
+        tape[position] = BfCell.new(cell_size?) if tape[position].nil?
 
         STDERR.printf('%s', unit.instruction) if debug?
 
@@ -171,7 +177,7 @@ module Yarbf
             ch = nil
             ch = STDIN.getc if input_mode? == :buffered
             ch = STDIN.getch if input_mode? == :raw
-            exit if ch == nil
+            exit if ch.nil?
             tape[position].value = ch.ord
           when '.' then
             STDOUT.putc tape[position].value
@@ -185,7 +191,8 @@ module Yarbf
               unit = unit.match
               next
             end
-          else fail "Illegal instruction '#{unit.instruction}'!"
+          else
+            fail "Invalid instruction '#{unit.instruction}'!"
         end
 
         unit = unit.next

@@ -1,10 +1,19 @@
 #!/usr/bin/env ruby
 
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'optparse' # for OptionParser
 require 'yarbf'
 
+# overrides the default #Kernel.fail.
+def fail(reason)
+  STDERR.puts File.basename($0) + ': ' + reason.to_s
+  exit false
+end
+
 # deal with SIGINT
-Signal.trap('INT') { exit false }
+Signal.trap('INT') { fail 'Interrupted!' }
 
 # set default values
 options = Hash.new
@@ -36,7 +45,7 @@ parser = OptionParser.new do |opts|
 
   # version
   opts.on('-V', '--version', 'show version and exit') do
-    puts 'yarbf 0.0.1'
+    puts 'yarbf ' + Yarbf::VERSION
     exit
   end
 
@@ -53,13 +62,11 @@ end
 begin
   parser.parse!
 rescue OptionParser::ParseError => e
-  STDERR.puts $0 + ': ' + e.to_s
-  exit false
+  fail e.to_s
 end
 
-if ARGV[0] == nil
-  STDERR.puts $0 + ': no source file specified'
-  exit false
+if ARGV[0].nil?
+  fail 'No source file specified!'
 end
 
 interpreter = Yarbf::BfInterpreter.new(options)
