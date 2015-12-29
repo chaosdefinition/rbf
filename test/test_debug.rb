@@ -16,8 +16,8 @@ class TestDebug < TestBase
       next if File.directory? input
 
       bf_src = File.join(@bf_src_sir, "#{filename}.bf")
-      stdout = File.join(@output_dir, "#{filename}.1")
-      stderr = File.join(@output_dir, "#{filename}.2")
+      stdout = File.join(@output_dir, "#{filename}-1")
+      stderr = File.join(@output_dir, "#{filename}-2")
 
       do_test(bf_src, '-d', input, stdout, stderr)
     end

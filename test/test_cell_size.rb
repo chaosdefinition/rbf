@@ -20,8 +20,8 @@ class TestCellSize < TestBase
       filename, size = $1, $2
 
       bf_src = File.join(@bf_src_sir, "#{filename}.bf")
-      stdout = File.join(@output_dir, "#{filename}-#{size}.1")
-      stderr = File.join(@output_dir, "#{filename}-#{size}.2")
+      stdout = File.join(@output_dir, "#{filename}-#{size}-1")
+      stderr = File.join(@output_dir, "#{filename}-#{size}-2")
 
       do_test(bf_src, "-s #{size}", input, stdout, stderr)
     end

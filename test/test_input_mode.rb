@@ -20,8 +20,8 @@ class TestInputMode < TestBase
       filename, mode = $1, $2
 
       bf_src = File.join(@bf_src_sir, "#{filename}.bf")
-      stdout = File.join(@output_dir, "#{filename}-#{mode}.1")
-      stderr = File.join(@output_dir, "#{filename}-#{mode}.2")
+      stdout = File.join(@output_dir, "#{filename}-#{mode}-1")
+      stderr = File.join(@output_dir, "#{filename}-#{mode}-2")
 
       do_test(bf_src, "-i #{mode}", input, stdout, stderr)
     end
