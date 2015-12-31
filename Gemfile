@@ -12,4 +12,5 @@ end
 # test dependencies
 group :test do
   gem 'minitest', '~> 5.8'
+  gem 'coveralls', require: false
 end
