@@ -12,7 +12,7 @@ module Yarbf
   ##
   # == BfInterpreter
   #
-  # BfInterpreter is the main class of module #YARBF.
+  # BfInterpreter is the main class of module #Yarbf.
   #
   # === Options
   #
@@ -55,14 +55,14 @@ module Yarbf
       unless options.is_a? Hash and OPTIONS.all? { |s| options.has_key? s }
         fail 'Invalid options given!'
       end
-      @option = options.dup
+      @options = options.dup
     end
 
     ##
     # Returns whether the interpreter is in debug mode.
     #
     def debug?
-      @option[:debug]
+      @options[:debug]
     end
 
     ##
@@ -71,17 +71,17 @@ module Yarbf
     # +debug+:: A boolean value.
     #
     def debug=(debug)
-      unless debug.is_a?(TrueClass) or debug.is_a?(FalseClass)
+      unless [true, false].include? debug
         fail "'debug' switch should be a boolean but is a #{debug.class}!"
       end
-      @option[:debug] = debug
+      @options[:debug] = debug
     end
 
     ##
     # Returns whether the interpreter accepts wrap around.
     #
     def wrap_around?
-      @option[:wrap_around]
+      @options[:wrap_around]
     end
 
     ##
@@ -90,17 +90,17 @@ module Yarbf
     # +wrap_around+:: A boolean value.
     #
     def wrap_around=(wrap_around)
-      unless wrap_around.is_a?(TrueClass) or wrap_around.is_a?(FalseClass)
+      unless [true, false].include? wrap_around
         fail "'wrap_around' should be a boolean but is a #{wrap_around.class}!"
       end
-      @option[:wrap_around] = wrap_around
+      @options[:wrap_around] = wrap_around
     end
 
     ##
     # Returns the size of each tape cell.
     #
     def cell_size?
-      @option[:cell_size]
+      @options[:cell_size]
     end
 
     ##
@@ -112,14 +112,14 @@ module Yarbf
       unless cell_size.is_a? Integer
         fail "'cell_size' should be an integer but is a #{cell_size.class}!"
       end
-      @option[:cell_size] = cell_size
+      @options[:cell_size] = cell_size
     end
 
     ##
     # Returns the current input mode.
     #
     def input_mode?
-      @option[:input_mode]
+      @options[:input_mode]
     end
 
     ##
@@ -131,7 +131,7 @@ module Yarbf
       unless INPUT_MODE_OPTIONS.include? input_mode
         fail 'Invalid value of input mode!'
       end
-      @option[:input_mode] = input_mode
+      @options[:input_mode] = input_mode
     end
 
     ##
@@ -159,46 +159,8 @@ module Yarbf
       unit = units[0]
       until unit.nil?
         tape[position] = BfCell.new(cell_size?) if tape[position].nil?
-
         STDERR.printf('%s', unit.instruction) if debug?
-
-        case unit.instruction
-          when '+' then
-            tape[position].increase(1, wrap_around?)
-          when '-' then
-            tape[position].decrease(1, wrap_around?)
-          when '<' then
-            position -= 1
-            fail 'Cell position out of bound!' if position < 0
-          when '>' then
-            position += 1
-          when ',' then
-            ch = nil
-            begin
-              ch = STDIN.getc if input_mode? == :buffered
-              ch = STDIN.getch if input_mode? == :raw
-            rescue SystemCallError => e
-              fail e.to_s
-            end
-            return if ch.nil?
-            tape[position].value = ch.ord
-          when '.' then
-            STDOUT.putc tape[position].value
-          when '[' then
-            if tape[position].value == 0
-              unit = unit.match
-              next
-            end
-          when ']' then
-            if tape[position].value != 0
-              unit = unit.match
-              next
-            end
-          else
-            fail "Invalid instruction '#{unit.instruction}'!"
-        end
-
-        unit = unit.next
+        unit, position = deal_unit(unit, tape, position)
       end
     end
 
@@ -254,7 +216,62 @@ module Yarbf
       end
     end
 
-    private :construct_program_units, :match_brackets
+    ##
+    # Reads next character from stdin.
+    #
+    def get_char
+      ch = nil
+      begin
+        ch = STDIN.getc if input_mode? == :buffered
+        ch = STDIN.getch if input_mode? == :raw
+      rescue SystemCallError => e
+        fail e.to_s
+      end
+      ch
+    end
+
+    def deal_unit(unit, tape, position)
+      case unit.instruction
+        when '+' then
+          tape[position].increase(1, wrap_around?)
+          unit = unit.next
+        when '-' then
+          tape[position].decrease(1, wrap_around?)
+          unit = unit.next
+        when '<' then
+          position -= 1
+          fail 'Cell position out of bound!' if position < 0
+          unit = unit.next
+        when '>' then
+          position += 1
+          unit = unit.next
+        when ',' then
+          ch = get_char
+          return nil, nil if ch.nil?
+          tape[position].value = ch.ord
+          unit = unit.next
+        when '.' then
+          STDOUT.putc tape[position].value
+          unit = unit.next
+        when '[' then
+          if tape[position].value == 0
+            unit = unit.match
+          else
+            unit = unit.next
+          end
+        when ']' then
+          if tape[position].value != 0
+            unit = unit.match
+          else
+            unit = unit.next
+          end
+        else
+          fail "Invalid instruction '#{unit.instruction}'!"
+      end
+      return unit, position
+    end
+
+    private :construct_program_units, :match_brackets, :get_char, :deal_unit
 
     ##
     # Cell of the Brainfuck tape.
