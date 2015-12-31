@@ -2,7 +2,7 @@ require 'helper' # for TestBase
 
 class TestDefault < TestBase
   # test default mode
-  def test_base
+  def test_default
     Dir.foreach @input_dir do |filename|
       next if filename.eql? '.' or filename.eql? '..'
 
