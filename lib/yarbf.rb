@@ -1,9 +1,8 @@
 require 'io/console' # for IO.getch
 
-module Yarbf
-  # gem version
-  VERSION = '0.0.2'
+require 'yarbf/version' # for Yarbf::VERSION
 
+module Yarbf
   # available options for the program
   OPTIONS = [:debug, :wrap_around, :cell_size, :input_mode] # :nodoc:
 
@@ -181,7 +180,7 @@ module Yarbf
             rescue SystemCallError => e
               fail e.to_s
             end
-            exit if ch.nil?
+            return if ch.nil?
             tape[position].value = ch.ord
           when '.' then
             STDOUT.putc tape[position].value

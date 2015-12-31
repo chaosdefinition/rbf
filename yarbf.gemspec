@@ -1,25 +1,24 @@
+# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
-require 'yarbf'
+require 'yarbf/version'
 
 Gem::Specification.new do |s|
-  # required attributes
-  s.authors     = ['Chaos Shen']
-  s.files       = ['lib/yarbf.rb']
-  s.name        = 'yarbf'
-  s.version     = Yarbf::VERSION
-  s.summary     = 'Yet another Brainfuck interpreter in Ruby'
+  s.name          = 'yarbf'
+  s.version       = Yarbf::VERSION
+  s.authors       = ['Chaos Shen']
+  s.email         = ['chaosdefinition@hotmail.com']
 
-  # recommended attributes
-  s.email       = 'chaosdefinition@hotmail.com'
-  s.homepage    = 'http://github.com/chaosdefinition/yarbf'
-  s.licenses    = ['MIT']
+  s.summary       = 'Yet another Brainfuck interpreter in Ruby'
+  s.description   = 'yarbf is a simple Brainfuck interpreter in Ruby.'
+  s.homepage      = 'http://github.com/chaosdefinition/yarbf'
+  s.license       = 'MIT'
 
-  # optional attributes
-  s.executables << 'yarbf'
-  s.description = 'yarbf is a simple Brainfuck interpreter in Ruby.'
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  s.bindir        = 'bin'
+  s.executables   = ['yarbf']
+  s.require_paths = ['lib']
 
-  # dependencies
+  # runtime dependencies
   s.add_runtime_dependency 'io-console', '~> 0.4'
 end

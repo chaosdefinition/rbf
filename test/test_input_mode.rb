@@ -16,7 +16,7 @@ class TestInputMode < TestBase
       next if File.directory? input
 
       # input filename must match this pattern
-      assert_not_nil(/(.*)-(buffered|raw)$/.match(filename))
+      refute_nil(/(.*)-(buffered|raw)$/.match(filename))
       filename, mode = $1, $2
 
       bf_src = File.join(@bf_src_sir, "#{filename}.bf")

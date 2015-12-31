@@ -7,3 +7,14 @@
 
 # Ruby Gems
 *.gem
+
+# bundle generated
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
