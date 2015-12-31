@@ -1,4 +1,4 @@
-require_relative 'test_base' # for TestBase
+require 'helper' # for TestBase
 
 class TestInputMode < TestBase
   def setup
