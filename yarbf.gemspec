@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
   s.executables   = ['yarbf']
   s.require_paths = ['lib']
 
+  s.required_ruby_version = '>= 2.0.0'
+
   # runtime dependencies
   s.add_runtime_dependency 'io-console', '~> 0.4'
 end
