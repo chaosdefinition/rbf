@@ -9,6 +9,32 @@ module Yarbf
   # available options for input mode
   INPUT_MODE_OPTIONS = [:buffered, :raw] # :nodoc:
 
+  module BooleanJudge
+    ##
+    # Determines and returns whether an object is a boolean value.
+    #
+    # +obj+:: An #Object.
+    # +&block+:: A block to call when true.
+    #
+    def is_boolean?(obj, &block)
+      result = [true, false].include?(obj)
+      yield if result && !block.nil?
+      result
+    end
+
+    ##
+    # Determines and returns whether an object is not a boolean value.
+    #
+    # +obj+:: An #Object.
+    # +&block+:: A block to call when true.
+    #
+    def not_boolean?(obj, &block)
+      result = [true, false].include?(obj)
+      yield unless result || block.nil?
+      result
+    end
+  end
+
   ##
   # == BfInterpreter
   #
@@ -42,21 +68,31 @@ module Yarbf
   #     :cell_size => 16,
   #     :input_mode => :buffered
   #   }
-  #   interpreter = YARBF::BfInterpreter.new(options)
+  #   interpreter = Yarbf::BfInterpreter.new(options)
   #   interpreter.run('/path/to/Brainfuck/source')
   #
   class BfInterpreter
+    include BooleanJudge
+
     ##
     # Initialize the instance.
     #
     # +options+:: A Hash containing options to the interpreter.
     #
     def initialize(options)
-      unless options.is_a? Hash and OPTIONS.all? { |s| options.has_key? s }
-        fail 'Invalid options given!'
+      unless options.is_a?(Hash) && OPTIONS.all? { |s| options.has_key? s }
+        fail 'Missing required options!'
       end
-      @options = options.dup
+      @options = options.select { |k| OPTIONS.include? k }
     end
+
+    ##
+    # Returns a human-readable string describing the interpreter.
+    #
+    def inspect
+      @options.inspect
+    end
+    alias_method :to_s, :inspect
 
     ##
     # Returns whether the interpreter is in debug mode.
@@ -71,7 +107,7 @@ module Yarbf
     # +debug+:: A boolean value.
     #
     def debug=(debug)
-      unless [true, false].include? debug
+      not_boolean?(debug) do
         fail "'debug' switch should be a boolean but is a #{debug.class}!"
       end
       @options[:debug] = debug
@@ -90,7 +126,7 @@ module Yarbf
     # +wrap_around+:: A boolean value.
     #
     def wrap_around=(wrap_around)
-      unless [true, false].include? wrap_around
+      not_boolean?(wrap_around) do
         fail "'wrap_around' should be a boolean but is a #{wrap_around.class}!"
       end
       @options[:wrap_around] = wrap_around
@@ -146,8 +182,7 @@ module Yarbf
       begin
         File.open(src) { |file| units = construct_program_units(file) }
       rescue SystemCallError => e
-        STDERR.puts $0 + ': ' + e.to_s
-        return
+        fail e.to_s
       end
 
       # match brackets
@@ -158,7 +193,7 @@ module Yarbf
       position = 0
       unit = units[0]
       until unit.nil?
-        tape[position] = BfCell.new(cell_size?) if tape[position].nil?
+        tape[position] = BfCell.new(position, cell_size?) if tape[position].nil?
         STDERR.printf('%s', unit.instruction) if debug?
         unit, position = deal_unit(unit, tape, position)
       end
@@ -175,13 +210,13 @@ module Yarbf
 
       file.each_byte do |c|
         case c.chr
-          when '+', '-', '<', '>', '[', ']', '.', ',' then
-            unit = BfProgramUnit.new(c.chr)
-            units[position - 1].next = unit if position > 0
-            units[position] = unit
-            position += 1
-          else
-            # other characters are considered as comments, do nothing
+        when '+', '-', '<', '>', '[', ']', '.', ',' then
+          unit = BfProgramUnit.new(c.chr, position)
+          units[position - 1].next = unit if position > 0
+          units[position] = unit
+          position += 1
+        else
+          # other characters are considered as comments, do nothing
         end
       end
 
@@ -191,7 +226,7 @@ module Yarbf
     ##
     # Matches each bracket '[' and ']' in the source.
     #
-    # +units+:: An #Array of program units.
+    # +units+:: An #Array of #BfProgramUnit.
     #
     def match_brackets(units)
       units.each_index do |i|
@@ -217,7 +252,7 @@ module Yarbf
     end
 
     ##
-    # Reads next character from stdin.
+    # Reads and returns the next character from stdin.
     #
     def get_char
       ch = nil
@@ -230,43 +265,51 @@ module Yarbf
       ch
     end
 
+    ##
+    # Deals with the current program unit, and returns the next program unit
+    # and tape position.
+    #
+    # +unit+:: The current program unit.
+    # +tape+:: An #Array of #BfCell.
+    # +position+:: The current position on the #tape.
+    #
     def deal_unit(unit, tape, position)
       case unit.instruction
-        when '+' then
-          tape[position].increase(1, wrap_around?)
-          unit = unit.next
-        when '-' then
-          tape[position].decrease(1, wrap_around?)
-          unit = unit.next
-        when '<' then
-          position -= 1
-          fail 'Cell position out of bound!' if position < 0
-          unit = unit.next
-        when '>' then
-          position += 1
-          unit = unit.next
-        when ',' then
-          ch = get_char
-          return nil, nil if ch.nil?
-          tape[position].value = ch.ord
-          unit = unit.next
-        when '.' then
-          STDOUT.putc tape[position].value
-          unit = unit.next
-        when '[' then
-          if tape[position].value == 0
-            unit = unit.match
-          else
-            unit = unit.next
-          end
-        when ']' then
-          if tape[position].value != 0
-            unit = unit.match
-          else
-            unit = unit.next
-          end
+      when '+' then
+        tape[position].increase(1, wrap_around?)
+        unit = unit.next
+      when '-' then
+        tape[position].decrease(1, wrap_around?)
+        unit = unit.next
+      when '<' then
+        position -= 1
+        fail 'Cell position out of bound!' if position < 0
+        unit = unit.next
+      when '>' then
+        position += 1
+        unit = unit.next
+      when ',' then
+        ch = get_char
+        return nil, nil if ch.nil?
+        tape[position].value = ch.ord
+        unit = unit.next
+      when '.' then
+        STDOUT.putc tape[position].value
+        unit = unit.next
+      when '[' then
+        if tape[position].value == 0
+          unit = unit.match
         else
-          fail "Invalid instruction '#{unit.instruction}'!"
+          unit = unit.next
+        end
+      when ']' then
+        if tape[position].value != 0
+          unit = unit.match
+        else
+          unit = unit.next
+        end
+      else
+        fail "Invalid instruction '#{unit.instruction}'!"
       end
       return unit, position
     end
@@ -277,12 +320,19 @@ module Yarbf
     # Cell of the Brainfuck tape.
     #
     class BfCell
+      attr_reader :position
       attr_accessor :cell_size, :value
 
-      def initialize(cell_size = 8, value = 0)
+      def initialize(position, cell_size = 8, value = 0)
+        @position = position
         @cell_size = cell_size
         @value = value
       end
+
+      def inspect
+        "{ pos: #{@position}, value: #{@value} }"
+      end
+      alias_method :to_s, :inspect
 
       ##
       # Increase the value of a cell.
@@ -314,16 +364,23 @@ module Yarbf
     # Program unit of Brainfuck.
     #
     class BfProgramUnit
-      attr_reader :instruction
+      attr_reader :instruction, :position
+      attr_accessor :match, :next
 
-      attr_accessor :match
-      attr_accessor :next
-
-      def initialize(instruction)
+      def initialize(instruction, position)
         @instruction = instruction
+        @position = position
         @match = nil
         @next = nil
       end
+
+      def inspect
+        s = "{ ins: '#{@instruction}', pos: #{@position}"
+        s += ", next: #{@next.position}" unless @next.nil?
+        s += ", match: #{@match.position}" unless @match.nil?
+        s += ' }'
+      end
+      alias_method :to_s, :inspect
     end
   end
 end

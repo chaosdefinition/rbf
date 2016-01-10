@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -w
 
 lib = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -8,7 +8,7 @@ require 'yarbf'
 
 # overrides the default #Kernel.fail.
 def fail(reason)
-  STDERR.puts File.basename($0) + ': ' + reason.to_s
+  $stderr.puts File.basename($0) + ': ' + reason.to_s
   exit false
 end
 

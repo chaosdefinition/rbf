@@ -1,0 +1,191 @@
+{ ins: '+', pos: 0, next: 1 }
+{ ins: '+', pos: 1, next: 2 }
+{ ins: '+', pos: 2, next: 3 }
+{ ins: '+', pos: 3, next: 4 }
+{ ins: '[', pos: 4, next: 5, match: 13 }
+{ ins: '>', pos: 5, next: 6 }
+{ ins: '+', pos: 6, next: 7 }
+{ ins: '+', pos: 7, next: 8 }
+{ ins: '+', pos: 8, next: 9 }
+{ ins: '+', pos: 9, next: 10 }
+{ ins: '+', pos: 10, next: 11 }
+{ ins: '<', pos: 11, next: 12 }
+{ ins: '-', pos: 12, next: 13 }
+{ ins: ']', pos: 13, next: 14, match: 4 }
+{ ins: '>', pos: 14, next: 15 }
+{ ins: '[', pos: 15, next: 16, match: 24 }
+{ ins: '<', pos: 16, next: 17 }
+{ ins: '+', pos: 17, next: 18 }
+{ ins: '+', pos: 18, next: 19 }
+{ ins: '+', pos: 19, next: 20 }
+{ ins: '+', pos: 20, next: 21 }
+{ ins: '+', pos: 21, next: 22 }
+{ ins: '>', pos: 22, next: 23 }
+{ ins: '-', pos: 23, next: 24 }
+{ ins: ']', pos: 24, next: 25, match: 15 }
+{ ins: '+', pos: 25, next: 26 }
+{ ins: '<', pos: 26, next: 27 }
+{ ins: '+', pos: 27, next: 28 }
+{ ins: '[', pos: 28, next: 29, match: 190 }
+{ ins: '>', pos: 29, next: 30 }
+{ ins: '[', pos: 30, next: 31, match: 38 }
+{ ins: '>', pos: 31, next: 32 }
+{ ins: '+', pos: 32, next: 33 }
+{ ins: '>', pos: 33, next: 34 }
+{ ins: '+', pos: 34, next: 35 }
+{ ins: '<', pos: 35, next: 36 }
+{ ins: '<', pos: 36, next: 37 }
+{ ins: '-', pos: 37, next: 38 }
+{ ins: ']', pos: 38, next: 39, match: 30 }
+{ ins: '+', pos: 39, next: 40 }
+{ ins: '+', pos: 40, next: 41 }
+{ ins: '>', pos: 41, next: 42 }
+{ ins: '>', pos: 42, next: 43 }
+{ ins: '[', pos: 43, next: 44, match: 50 }
+{ ins: '<', pos: 44, next: 45 }
+{ ins: '<', pos: 45, next: 46 }
+{ ins: '+', pos: 46, next: 47 }
+{ ins: '>', pos: 47, next: 48 }
+{ ins: '>', pos: 48, next: 49 }
+{ ins: '-', pos: 49, next: 50 }
+{ ins: ']', pos: 50, next: 51, match: 43 }
+{ ins: '>', pos: 51, next: 52 }
+{ ins: '>', pos: 52, next: 53 }
+{ ins: '>', pos: 53, next: 54 }
+{ ins: '[', pos: 54, next: 55, match: 56 }
+{ ins: '-', pos: 55, next: 56 }
+{ ins: ']', pos: 56, next: 57, match: 54 }
+{ ins: '+', pos: 57, next: 58 }
+{ ins: '+', pos: 58, next: 59 }
+{ ins: '>', pos: 59, next: 60 }
+{ ins: '[', pos: 60, next: 61, match: 62 }
+{ ins: '-', pos: 61, next: 62 }
+{ ins: ']', pos: 62, next: 63, match: 60 }
+{ ins: '+', pos: 63, next: 64 }
+{ ins: '>', pos: 64, next: 65 }
+{ ins: '>', pos: 65, next: 66 }
+{ ins: '>', pos: 66, next: 67 }
+{ ins: '+', pos: 67, next: 68 }
+{ ins: '[', pos: 68, next: 69, match: 81 }
+{ ins: '[', pos: 69, next: 70, match: 71 }
+{ ins: '-', pos: 70, next: 71 }
+{ ins: ']', pos: 71, next: 72, match: 69 }
+{ ins: '+', pos: 72, next: 73 }
+{ ins: '+', pos: 73, next: 74 }
+{ ins: '+', pos: 74, next: 75 }
+{ ins: '+', pos: 75, next: 76 }
+{ ins: '+', pos: 76, next: 77 }
+{ ins: '+', pos: 77, next: 78 }
+{ ins: '>', pos: 78, next: 79 }
+{ ins: '>', pos: 79, next: 80 }
+{ ins: '>', pos: 80, next: 81 }
+{ ins: ']', pos: 81, next: 82, match: 68 }
+{ ins: '<', pos: 82, next: 83 }
+{ ins: '<', pos: 83, next: 84 }
+{ ins: '<', pos: 84, next: 85 }
+{ ins: '[', pos: 85, next: 86, match: 117 }
+{ ins: '[', pos: 86, next: 87, match: 102 }
+{ ins: '<', pos: 87, next: 88 }
+{ ins: '+', pos: 88, next: 89 }
+{ ins: '+', pos: 89, next: 90 }
+{ ins: '+', pos: 90, next: 91 }
+{ ins: '+', pos: 91, next: 92 }
+{ ins: '+', pos: 92, next: 93 }
+{ ins: '+', pos: 93, next: 94 }
+{ ins: '+', pos: 94, next: 95 }
+{ ins: '+', pos: 95, next: 96 }
+{ ins: '<', pos: 96, next: 97 }
+{ ins: '+', pos: 97, next: 98 }
+{ ins: '+', pos: 98, next: 99 }
+{ ins: '>', pos: 99, next: 100 }
+{ ins: '>', pos: 100, next: 101 }
+{ ins: '-', pos: 101, next: 102 }
+{ ins: ']', pos: 102, next: 103, match: 86 }
+{ ins: '+', pos: 103, next: 104 }
+{ ins: '<', pos: 104, next: 105 }
+{ ins: '.', pos: 105, next: 106 }
+{ ins: '<', pos: 106, next: 107 }
+{ ins: '[', pos: 107, next: 108, match: 115 }
+{ ins: '>', pos: 108, next: 109 }
+{ ins: '-', pos: 109, next: 110 }
+{ ins: '-', pos: 110, next: 111 }
+{ ins: '-', pos: 111, next: 112 }
+{ ins: '-', pos: 112, next: 113 }
+{ ins: '<', pos: 113, next: 114 }
+{ ins: '-', pos: 114, next: 115 }
+{ ins: ']', pos: 115, next: 116, match: 107 }
+{ ins: '<', pos: 116, next: 117 }
+{ ins: ']', pos: 117, next: 118, match: 85 }
+{ ins: '<', pos: 118, next: 119 }
+{ ins: '<', pos: 119, next: 120 }
+{ ins: '[', pos: 120, next: 121, match: 186 }
+{ ins: '>', pos: 121, next: 122 }
+{ ins: '>', pos: 122, next: 123 }
+{ ins: '>', pos: 123, next: 124 }
+{ ins: '>', pos: 124, next: 125 }
+{ ins: '>', pos: 125, next: 126 }
+{ ins: '[', pos: 126, next: 127, match: 182 }
+{ ins: '>', pos: 127, next: 128 }
+{ ins: '>', pos: 128, next: 129 }
+{ ins: '>', pos: 129, next: 130 }
+{ ins: '[', pos: 130, next: 131, match: 132 }
+{ ins: '-', pos: 131, next: 132 }
+{ ins: ']', pos: 132, next: 133, match: 130 }
+{ ins: '+', pos: 133, next: 134 }
+{ ins: '+', pos: 134, next: 135 }
+{ ins: '+', pos: 135, next: 136 }
+{ ins: '+', pos: 136, next: 137 }
+{ ins: '+', pos: 137, next: 138 }
+{ ins: '+', pos: 138, next: 139 }
+{ ins: '+', pos: 139, next: 140 }
+{ ins: '+', pos: 140, next: 141 }
+{ ins: '+', pos: 141, next: 142 }
+{ ins: '<', pos: 142, next: 143 }
+{ ins: '[', pos: 143, next: 144, match: 148 }
+{ ins: '>', pos: 144, next: 145 }
+{ ins: '-', pos: 145, next: 146 }
+{ ins: '<', pos: 146, next: 147 }
+{ ins: '-', pos: 147, next: 148 }
+{ ins: ']', pos: 148, next: 149, match: 143 }
+{ ins: '+', pos: 149, next: 150 }
+{ ins: '+', pos: 150, next: 151 }
+{ ins: '+', pos: 151, next: 152 }
+{ ins: '+', pos: 152, next: 153 }
+{ ins: '+', pos: 153, next: 154 }
+{ ins: '+', pos: 154, next: 155 }
+{ ins: '+', pos: 155, next: 156 }
+{ ins: '+', pos: 156, next: 157 }
+{ ins: '+', pos: 157, next: 158 }
+{ ins: '>', pos: 158, next: 159 }
+{ ins: '[', pos: 159, next: 160, match: 173 }
+{ ins: '-', pos: 160, next: 161 }
+{ ins: '[', pos: 161, next: 162, match: 166 }
+{ ins: '<', pos: 162, next: 163 }
+{ ins: '-', pos: 163, next: 164 }
+{ ins: '>', pos: 164, next: 165 }
+{ ins: '-', pos: 165, next: 166 }
+{ ins: ']', pos: 166, next: 167, match: 161 }
+{ ins: '+', pos: 167, next: 168 }
+{ ins: '[', pos: 168, next: 169, match: 172 }
+{ ins: '<', pos: 169, next: 170 }
+{ ins: '<', pos: 170, next: 171 }
+{ ins: '<', pos: 171, next: 172 }
+{ ins: ']', pos: 172, next: 173, match: 168 }
+{ ins: ']', pos: 173, next: 174, match: 159 }
+{ ins: '<', pos: 174, next: 175 }
+{ ins: '[', pos: 175, next: 176, match: 180 }
+{ ins: '>', pos: 176, next: 177 }
+{ ins: '+', pos: 177, next: 178 }
+{ ins: '<', pos: 178, next: 179 }
+{ ins: '-', pos: 179, next: 180 }
+{ ins: ']', pos: 180, next: 181, match: 175 }
+{ ins: '>', pos: 181, next: 182 }
+{ ins: ']', pos: 182, next: 183, match: 126 }
+{ ins: '<', pos: 183, next: 184 }
+{ ins: '<', pos: 184, next: 185 }
+{ ins: '-', pos: 185, next: 186 }
+{ ins: ']', pos: 186, next: 187, match: 120 }
+{ ins: '<', pos: 187, next: 188 }
+{ ins: '<', pos: 188, next: 189 }
+{ ins: '-', pos: 189, next: 190 }
+{ ins: ']', pos: 190, match: 28 }
