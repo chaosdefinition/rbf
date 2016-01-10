@@ -4,7 +4,7 @@ require 'yarbf'
 require 'minitest/autorun'
 require 'tempfile'
 
-# add Coverall
+# add Coveralls
 require 'coveralls'
 Coveralls.wear!
 
@@ -24,13 +24,13 @@ class TestBase < Minitest::Test
     err.close
 
     # run yarbf
-    system "cat #{input} | yarbf #{args} #{bf_src} 1>#{out.path} 2>#{err.path}"
+    system("cat #{input} | yarbf #{args} #{bf_src} 1>#{out.path} 2>#{err.path}")
 
     # do compare with correct results
-    assert_equal File.read(correct_out), File.read(out),
-                 "Test failed at stdout of #{bf_src} with input from #{input}"
-    assert_equal File.read(correct_err), File.read(err),
-                 "Test failed at stderr of #{bf_src} with input from #{input}"
+    assert_equal(File.read(correct_out), File.read(out),
+                 "Test failed at stdout of #{bf_src} with input from #{input}")
+    assert_equal(File.read(correct_err), File.read(err),
+                 "Test failed at stderr of #{bf_src} with input from #{input}")
 
     out.unlink
     err.unlink

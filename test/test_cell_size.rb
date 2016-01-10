@@ -9,11 +9,11 @@ class TestCellSize < TestBase
 
   # test 'cell_size' option
   def test_cell_size
-    Dir.foreach @input_dir do |filename|
-      next if filename.eql? '.' or filename.eql? '..'
+    Dir.foreach(@input_dir) do |filename|
+      next if filename.eql?('.') || filename.eql?('..')
 
       input = File.join(@input_dir, filename)
-      next if File.directory? input
+      next if File.directory?(input)
 
       # input filename must match this pattern
       refute_nil(/(.*)-([1-9]\d*)$/.match(filename))

@@ -9,11 +9,11 @@ class TestInputMode < TestBase
 
   # test 'wrap_around' switch
   def test_wrap_around
-    Dir.foreach @input_dir do |filename|
-      next if filename.eql? '.' or filename.eql? '..'
+    Dir.foreach(@input_dir) do |filename|
+      next if filename.eql?('.') || filename.eql?('..')
 
       input = File.join(@input_dir, filename)
-      next if File.directory? input
+      next if File.directory?(input)
 
       # input filename must match this pattern
       refute_nil(/(.*)-(buffered|raw)$/.match(filename))

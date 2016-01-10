@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'http://github.com/chaosdefinition/yarbf'
   s.license       = 'MIT'
 
-  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  s.files         = `git ls-files -z`.split("\x0")
   s.bindir        = 'bin'
   s.executables   = ['yarbf']
   s.require_paths = ['lib']

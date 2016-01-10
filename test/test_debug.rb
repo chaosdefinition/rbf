@@ -9,11 +9,11 @@ class TestDebug < TestBase
 
   # test 'debug' switch
   def test_debug
-    Dir.foreach @input_dir do |filename|
-      next if filename.eql? '.' or filename.eql? '..'
+    Dir.foreach(@input_dir) do |filename|
+      next if filename.eql?('.') || filename.eql?('..')
 
       input = File.join(@input_dir, filename)
-      next if File.directory? input
+      next if File.directory?(input)
 
       bf_src = File.join(@bf_src_sir, "#{filename}.bf")
       stdout = File.join(@output_dir, "#{filename}-1")
