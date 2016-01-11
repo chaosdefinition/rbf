@@ -60,21 +60,25 @@ class TestBfInterpreter < TestBase
           :initialize_with_other_options
 
   # test BfInterpreter#*?
-  def test_option_setters
+  def test_option_accessors
     interpreter = Yarbf::BfInterpreter.new(@options)
 
-    assert_raises do
-      interpreter.debug = :debug
-    end
-    assert_raises do
-      interpreter.wrap_around = 'no'
-    end
-    assert_raises do
-      interpreter.cell_size = 8.0
-    end
-    assert_raises do
-      interpreter.input_mode = :some_other_mode
-    end
+    # debug accessor
+    assert_raises { interpreter.debug = :debug }
+    assert_equal(@options[:debug], interpreter.debug?)
+    assert_equal(false, interpreter.debug = false)
+    # wrap around accessor
+    assert_raises { interpreter.wrap_around = 'no' }
+    assert_equal(@options[:wrap_around], interpreter.wrap_around?)
+    assert_equal(false, interpreter.wrap_around = false)
+    # cell size accessor
+    assert_raises { interpreter.cell_size = 8.0 }
+    assert_equal(@options[:cell_size], interpreter.cell_size?)
+    assert_equal(9, interpreter.cell_size = 9)
+    # input mode accessor
+    assert_raises { interpreter.input_mode = :some_other_mode }
+    assert_equal(@options[:input_mode], interpreter.input_mode?)
+    assert_equal(:buffered, interpreter.input_mode = :buffered)
   end
 
   # test BfInterpreter#construct_program_units and BfInterpreter#match_brackets

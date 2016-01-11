@@ -1,12 +1,12 @@
+# add Coveralls
+require 'coveralls'
+Coveralls.wear!
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'yarbf'
 
 require 'minitest/autorun'
 require 'tempfile'
-
-# add Coveralls
-require 'coveralls'
-Coveralls.wear!
 
 class TestBase < Minitest::Test
   def setup

@@ -194,7 +194,7 @@ module Yarbf
       unit = units[0]
       until unit.nil?
         tape[position] = BfCell.new(position, cell_size?) if tape[position].nil?
-        STDERR.printf('%s', unit.instruction) if debug?
+        $stderr.printf('%s', unit.instruction) if debug?
         unit, position = deal_unit(unit, tape, position)
       end
     end
@@ -257,8 +257,8 @@ module Yarbf
     def get_char
       ch = nil
       begin
-        ch = STDIN.getc if input_mode? == :buffered
-        ch = STDIN.getch if input_mode? == :raw
+        ch = $stdin.getc if input_mode? == :buffered
+        ch = $stdin.getch if input_mode? == :raw
       rescue SystemCallError => e
         fail e.to_s
       end
@@ -294,7 +294,7 @@ module Yarbf
         tape[position].value = ch.ord
         unit = unit.next
       when '.' then
-        STDOUT.putc tape[position].value
+        $stdout.putc tape[position].value
         unit = unit.next
       when '[' then
         if tape[position].value == 0
