@@ -378,7 +378,7 @@ module Yarbf
         s = "{ ins: '#{@instruction}', pos: #{@position}"
         s += ", next: #{@next.position}" unless @next.nil?
         s += ", match: #{@match.position}" unless @match.nil?
-        s += ' }'
+        s + ' }'
       end
       alias_method :to_s, :inspect
     end
