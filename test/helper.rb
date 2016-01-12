@@ -36,13 +36,13 @@ class TestBase < Minitest::Test
   end
 
   # rewritten capture_io, add redirected input
-  def capture_io(in_file)
+  def capture_io(in_file = nil)
     require 'tempfile'
 
     orig_stdin = $stdin.dup
     orig_stdout, out_file = $stdout.dup, Tempfile.new('yarbf-out')
     orig_stderr, err_file = $stderr.dup, Tempfile.new('yarbf-err')
-    $stdin.reopen(in_file)
+    $stdin.reopen(in_file) unless in_file.nil?
     $stdout.reopen(out_file)
     $stderr.reopen(err_file)
 
