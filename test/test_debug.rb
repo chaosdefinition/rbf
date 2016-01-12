@@ -19,7 +19,8 @@ class TestDebug < TestBase
       stdout = File.join(@output_dir, "#{filename}-1")
       stderr = File.join(@output_dir, "#{filename}-2")
 
-      do_test(bf_src, '-d', input, stdout, stderr)
+      @options[:debug] = true
+      do_test(bf_src, @options, input, stdout, !File.read(stderr).empty?)
     end
   end
 end

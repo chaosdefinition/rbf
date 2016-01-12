@@ -21,7 +21,7 @@ class TestBfInterpreter < TestBase
   end
 
   def initialize_with_invalid_type
-    options = 'debug: true, wrap_around: true, cell_size: 7, input_mode: raw'
+    options = @options.to_s
     assert_raises do
       Yarbf::BfInterpreter.new(options)
     end
@@ -37,21 +37,10 @@ class TestBfInterpreter < TestBase
   end
 
   def initialize_with_other_options
-    options = {
-        :debug => true,
-        :wrap_around => true,
-        :cell_size => 7,
-        :input_mode => :raw,
+    options = @options.dup
+    options[:just_a_test] = 'yes' # other options
 
-        # other options
-        :just_a_test => 'yes'
-    }
-    expected = {
-      :debug => true,
-      :wrap_around => true,
-      :cell_size => 7,
-      :input_mode => :raw
-    }
+    expected = @options.dup
     actual = Yarbf::BfInterpreter.new(options).instance_variable_get(:@options)
     assert_equal(expected, actual)
   end

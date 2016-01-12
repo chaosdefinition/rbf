@@ -7,8 +7,8 @@ class TestInputMode < TestBase
     @output_dir = File.join(@output_dir, 'input_mode')
   end
 
-  # test 'wrap_around' switch
-  def test_wrap_around
+  # test 'input_mode' option
+  def test_input_mode
     Dir.foreach(@input_dir) do |filename|
       next if filename.eql?('.') || filename.eql?('..')
 
@@ -23,7 +23,8 @@ class TestInputMode < TestBase
       stdout = File.join(@output_dir, "#{filename}-#{mode}-1")
       stderr = File.join(@output_dir, "#{filename}-#{mode}-2")
 
-      do_test(bf_src, "-i #{mode}", input, stdout, stderr)
+      @options[:input_mode] = mode.to_sym
+      do_test(bf_src, @options, input, stdout, !File.read(stderr).empty?)
     end
   end
 end

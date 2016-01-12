@@ -38,7 +38,7 @@ module Yarbf
   ##
   # == BfInterpreter
   #
-  # BfInterpreter is the main class of module #Yarbf.
+  # BfInterpreter is the main class of module Yarbf.
   #
   # === Options
   #
@@ -77,7 +77,7 @@ module Yarbf
     ##
     # Initialize the instance.
     #
-    # +options+:: A Hash containing options to the interpreter.
+    # +options+:: A #Hash containing options to the interpreter.
     #
     def initialize(options)
       unless options.is_a?(Hash) && OPTIONS.all? { |s| options.has_key? s }
@@ -102,7 +102,7 @@ module Yarbf
     end
 
     ##
-    # Sets the interpreter to debug mode
+    # Sets the interpreter to debug mode.
     #
     # +debug+:: A boolean value.
     #
@@ -142,10 +142,10 @@ module Yarbf
     ##
     # Sets the size of each tape cell.
     #
-    # +cell_size+:: An integer.
+    # +cell_size+:: An #Integer.
     #
     def cell_size=(cell_size)
-      unless cell_size.is_a? Integer
+      unless cell_size.is_a?(Integer)
         fail "'cell_size' should be an integer but is a #{cell_size.class}!"
       end
       @options[:cell_size] = cell_size
@@ -161,10 +161,10 @@ module Yarbf
     ##
     # Sets the input mode.
     #
-    # +input_mode+:: A symbol of +:buffered+ or +:raw+.
+    # +input_mode+:: A #Symbol of +:buffered+ or +:raw+.
     #
     def input_mode=(input_mode)
-      unless INPUT_MODE_OPTIONS.include? input_mode
+      unless INPUT_MODE_OPTIONS.include?(input_mode)
         fail 'Invalid value of input mode!'
       end
       @options[:input_mode] = input_mode
@@ -194,7 +194,7 @@ module Yarbf
       unit = units[0]
       until unit.nil?
         tape[position] = BfCell.new(position, cell_size?) if tape[position].nil?
-        $stderr.printf('%s', unit.instruction) if debug?
+        $stdout.print(unit.instruction) if debug?
         unit, position = deal_unit(unit, tape, position)
       end
     end

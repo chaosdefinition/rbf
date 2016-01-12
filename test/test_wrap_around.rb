@@ -19,7 +19,8 @@ class TestWrapAround < TestBase
       stdout = File.join(@output_dir, "#{filename}-1")
       stderr = File.join(@output_dir, "#{filename}-2")
 
-      do_test(bf_src, '-w', input, stdout, stderr)
+      @options[:wrap_around] = true
+      do_test(bf_src, @options, input, stdout, !File.read(stderr).empty?)
     end
   end
 end
